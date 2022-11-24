@@ -12,6 +12,25 @@ const filterBtn = document.querySelector("#filter-select");
 let oldInputValue;
 
 // Funções
+
+function alertSucess(msg) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+      
+      Toast.fire({
+        icon: 'success',
+        title: msg
+      })
+}
 const saveTodo = (text, done = 0, save = 1) => {
   const todo = document.createElement("div");
   todo.classList.add("todo");
@@ -42,11 +61,13 @@ const saveTodo = (text, done = 0, save = 1) => {
 
   if (save) {
     saveTodoLocalStorage({ text, done: 0 });
+    alertSucess("Tarefa cadastrada com sucesso");
   }
 
   todoList.appendChild(todo);
 
   todoInput.value = "";
+  
 };
 
 const toggleForms = () => {
@@ -66,6 +87,7 @@ const updateTodo = (text) => {
 
       // Utilizando dados da localStorage
       updateTodoLocalStorage(oldInputValue, text);
+      alertSucess("Tarefa atualizada com sucesso")
     }
   });
 };
@@ -142,6 +164,7 @@ document.addEventListener("click", (e) => {
     parentEl.classList.toggle("done");
 
     updateTodoStatusLocalStorage(todoTitle);
+    alertSucess("Tarefa atualizada com sucesso")
   }
 
   if (targetEl.classList.contains("remove-todo")) {
@@ -149,6 +172,7 @@ document.addEventListener("click", (e) => {
 
     // Utilizando dados da localStorage
     removeTodoLocalStorage(todoTitle);
+    alertSucess("Tarefa deletada com sucesso")
   }
 
   if (targetEl.classList.contains("edit-todo")) {
